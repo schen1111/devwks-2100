@@ -66,7 +66,7 @@ This usecase demonstrates how to leverage Ansible to onboard devices to Crosswor
 		* ```src``` - source of template 	
 		* ```dest``` - destionation location to render the template output
 	* Inspect this Jinja2 template ```ansible_project/roles/device_onboarding/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/device_onboarding/templates/add-device.j2))
-		* All the variables referenced in the template can be found in the devices variable ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
+		* All the variables referenced in the template can be found in the devices variable ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
 	* By using the template module, you can easily generate large amount of API payloads
 
 ```yaml
@@ -85,7 +85,12 @@ This usecase demonstrates how to leverage Ansible to onboard devices to Crosswor
 3. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/inventory/overview```. You can view devices that are currently onboarded to Crosswork. There should be none at this point
 	* Username: ```admin```
 	* Password: ```C!sco12345```
-4. Execute this playbook to onboard devices: ```ansible-playbook device-onboarding-play.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/device-onboarding-play.yml)). This will onboard all devices listed in the ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
+4. Execute this playbook to onboard devices: This will onboard all devices listed in the ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
+
+```
+ansible-playbook device-onboarding-play.yml
+```
+Contents of ```ansible-playbook device-onboarding-play.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/device-onboarding-play.yml)). 
 5. Check the Crosswork Web GUI in the Windows VM for the newly onboarded devices: ```https://198.18.134.219:30603/#/inventory/overview```
 
 
