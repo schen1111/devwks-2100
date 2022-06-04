@@ -85,13 +85,11 @@ This usecase demonstrates how to leverage Ansible to onboard devices to Crosswor
 3. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/inventory/overview```. You can view devices that are currently onboarded to Crosswork. There should be none at this point
 	* Username: ```admin```
 	* Password: ```C!sco12345```
-4. Execute the below playbook to onboard devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/device-onboarding-play.yml)):
+4. The devices listed in ```ansible_project/global_variable.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)) will be onboarded to Crosswork
+5. Execute the below playbook to onboard devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/device-onboarding-play.yml)):
 ```
 ansible-playbook device-onboarding-play.yml
 ```
-
-	* It will onboard all devices listed in the ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
-
 5. Check the Crosswork Web GUI in the Windows VM for the newly onboarded devices: ```https://198.18.134.219:30603/#/inventory/overview```
 
 
