@@ -39,15 +39,25 @@
   loop_control:
     label: "{{ item.name }}"
 
-
-# Timestamp reference: https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#handling-dates-and-times
+# This task will output the CDG vdgUuid to a file
 - name: output CDG vdgUuid to a file
   local_action:
     module: lineinfile
     line: "CDG name: {{ item.name }}. CDG vdgUuid: {{item.configData.vdgUuid}}"
-    path: "{{playbook_dir}}/temp_folder/obtain_cdg_info/cdg-info-{{ '%Y-%m-%d %H:%M:%S' | strftime(ansible_date_time.epoch) }}"
+    path: "{{playbook_dir}}/temp_folder/obtain_cdg_info/cdg-info"
     create: yes
   loop: "{{cdg_detail.json.data}}"
   loop_control:
     label: "{{ item.name }}"
   when: item.configData.role == "ASSIGNED"
+
+
+# For Cisco Live Lab workshop use
+# This task will replace vdguuid for each device in global_variable.yml with
+#  the first occurrence of the vdguuid from get CDG detail API.
+# This only works in this scenario because there's only CDG in the lab
+- name: replace CDG vdgUuid in the global_variable.yml variable file
+  replace:
+    path: "{{playbook_dir}}/global_variable.yml"
+    regexp: 'vdguuid:.*'
+    replace: "vdguuid: {{cdg_detail.json.data[0].configData.vdgUuid}}"

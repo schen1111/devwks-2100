@@ -67,6 +67,7 @@ This usecase demonstrates how to leverage Ansible to onboard devices to Crosswor
 		* ```dest``` - destionation location to render the template output
 	* Inspect this Jinja2 template ```ansible_project/roles/device_onboarding/templates/add-device.j2```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/device_onboarding/templates/add-device.j2))
 		* All the variables referenced in the template can be found in the devices variable ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
+	* Example of the payloads```ansible_project/temp_folder/device_onboarding_api_payload```: [content link](https://github.com/schen1111/devwks-2100/tree/main/ansible_project/temp_folder/device_onboarding_api_payload)
 	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invovke the onbarding API will able to generate the payload on the fly without writing the payload to disk.
 	* By using the template module, you can easily generate large amount of API payloads
 
@@ -155,11 +156,36 @@ This usecase demonstrates how to leverage Ansible to attach onboarded devices to
 	    ]
 	```
 	
+	* Example of the payloads```ansible_project/temp_folder/attach_device_to_cdg_api_payload```: [content link](https://github.com/schen1111/devwks-2100/tree/main/ansible_project/temp_folder/attach_device_to_cdg_api_payload)
 	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invovke the attach device to CDG API will able to generate the payload on the fly without writing the payload to disk.
 	* By using the template module, you can easily generate large amount of API payloads
-	* Example of the payload: 
-6. d
-7. 
+
+
+#### Task 6: Attach Devices to CDG
+1. Go to directory: 
+```
+cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project
+```
+2. Execute the Ansible playbook to prepare for this task:
+```
+ansible-playbook cisco_live_prepare_for_attach_device_to_cdg_play.yml
+```
+3. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/cdg/inventory```. You can view devices that are currently attached to CDG by looking at the "Attached Device Count". There should be none at this point
+	* Username: ```admin```
+	* Password: ```C!sco12345```
+4. Execute the below playbook to identify the VDG UUID for your instance:
+```
+ansible-playbook obtain_cdg_info_play.yml
+```
+5. (Optional) You can obtain the VDG UUID from below output. The Ansible play from the last step already updated ```ansible_project/global_variable.yml``` with the CDG UUID information for each device
+```
+cat temp_folder/obtain_cdg_info/cdg-info
+```
+5. Execute the below playbook to onboard devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/device-onboarding-play.yml)):
+```
+ansible-playbook attach_device_to_cdg_play.yml
+```
+5. Check the Crosswork Web GUI in the Windows VM for "Attached Device Count": ```https://198.18.134.219:30603/#/cdg/inventory```
 
 
 
