@@ -7,8 +7,7 @@ cnc_user: admin
 cnc_pw: C!sco12345
 
 
-# defaults file for device_onboarding
-
+# Converted CSV to YAML. This is a list of dictionaries 
 devices:
   - host_name: Node-1
     connectivity_ip: 198.19.1.1
