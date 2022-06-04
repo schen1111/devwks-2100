@@ -67,6 +67,7 @@ This usecase demonstrates how to leverage Ansible to onboard devices to Crosswor
 		* ```dest``` - destionation location to render the template output
 	* Inspect this Jinja2 template ```ansible_project/roles/device_onboarding/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/device_onboarding/templates/add-device.j2))
 		* All the variables referenced in the template can be found in the devices variable ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
+	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invovke the onbarding API will able to generate the payload on the fly without writing the payload to disk.
 	* By using the template module, you can easily generate large amount of API payloads
 
 ```yaml
