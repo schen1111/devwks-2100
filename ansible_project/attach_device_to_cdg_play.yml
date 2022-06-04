@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  gather_facts: true
+  connection: local
+  vars_files:
+    - ./global_variable.yml
+
+  roles:
+    - attach_device_to_cdg

@@ -1,0 +1,11 @@
+---
+
+- hosts: localhost
+  gather_facts: true
+  connection: local
+  vars_files:
+    - ./global_variable.yml
+
+  roles:
+    - cisco_live_prepare_for_device_onboarding
+    - device_onboarding

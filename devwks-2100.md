@@ -13,9 +13,9 @@
 ### Use Case Summary
 This workshop provides walkthrough for few use cases to automate Cisco Crosswork API by using Ansible. Participants can leverage the provided use cases to start their Crosswork API automation journey.
 
-#### Use-case #1: Device onboarding
-#### Use-case #2: Attach devices to CDG (Crosswork Data Collector)
-#### Use-case #3: Change the admin state (up or down) of the device in Crosswork
+#### Use-case #1: Device Onboarding
+#### Use-case #2: Attach Devices to CDG (Crosswork Data Collector)
+#### Use-case #3: Change the Admin State (up or down) of the Device in Crosswork
 
 <br/><br/>
 ### API Authentication (Common Across all Use Cases)
@@ -65,7 +65,7 @@ This usecase demonstrates how to leverage Ansible to onboard devices to Crosswor
 	* The template module mainly consist of two parts:
 		* ```src``` - source of template 	
 		* ```dest``` - destionation location to render the template output
-	* Inspect this Jinja2 template ```ansible_project/roles/device_onboarding/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/device_onboarding/templates/add-device.j2))
+	* Inspect this Jinja2 template ```ansible_project/roles/device_onboarding/templates/add-device.j2```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/device_onboarding/templates/add-device.j2))
 		* All the variables referenced in the template can be found in the devices variable ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
 	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invovke the onbarding API will able to generate the payload on the fly without writing the payload to disk.
 	* By using the template module, you can easily generate large amount of API payloads
@@ -98,6 +98,68 @@ ansible-playbook cisco_live_prepare_for_device_onboarding_play.yml
 ansible-playbook device-onboarding-play.yml
 ```
 5. Check the Crosswork Web GUI in the Windows VM for the newly onboarded devices: ```https://198.18.134.219:30603/#/inventory/overview```
+
+
+<br/><br/>
+### Use-case #2: Attach Devices to CDG (Crosswork Data Collector)
+This usecase demonstrates how to leverage Ansible to attach onboarded devices to CDG (Crosswork Data Gateway)
+
+#### Task 5: Understand Attach Devices to CDG
+1. Once devices are onboarded to Crosswork, they must be attached to CDG before becoming operational
+2. Crosswork can have multiple CDGs for redundancy and scalability reasons. In this lab, there will be only one CDG. If there are mutiple CDGs, devices can be attached to different CDG
+3. You can define which device is attached to which CDG by changing the vdguuid for each device under ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
+4. Inspect the Ansible tasks: ```ansible_project/roles/attach_device_to_cdg/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/attach_device_to_cdg/tasks/main.yml))
+	* Task```invoke nodes query API to obtain device UUID for devices that are onboarded to CW``` will make an API call to obtain devices info which includes the UUID for each device.
+	* Task```create a new dictionary with Deivce IP and Device vdguuid``` will create a new dictionary variable which device IP as the key and the vdguuid as the value. The next task will leverage this variable to look up which device should be attach to which CDG.
+	* Task ```create a list of dictionaries for the Jinja2 template``` will create a list of dictionaries with hostname, deivce ip and device uuid and planned vdguuid for devices that aren't attached to a CDG
+5. Task```create API payloads for attach CDG to devices```will generate attach device to CDG API payload from the variable ```device_uuid_cdguuid_list``` using the Jinja2 template
+
+	```yaml
+	- name: create API payloads for attach CDG to devices
+	  template:
+	    src: "../templates/attach-cdg.j2"
+	    dest: "{{playbook_dir}}/temp_folder/attach_device_to_cdg_api_payload/attach-cdg-{{item.hostname}}.json"
+	  loop: "{{device_uuid_cdguuid_list}}"
+	  loop_control: 
+	    label: "{{item.hostname}}"
+    ```
+    
+	* The task will loop through the ```device_uuid_cdguuid_list``` variable
+	* For each item in the variable list, it will generate an API payload by using the Ansible template module
+	* The template module mainly consist of two parts:
+		* ```src``` - source of template 	
+		* ```dest``` - destionation location to render the template output
+	* Inspect this Jinja2 template ```ansible_project/roles/attach_device_to_cdg/templates/attach-cdg.j2```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/attach_device_to_cdg/templates/attach-cdg.j2))
+	* All the variables referenced in the template can be found in the ```device_uuid_cdguuid_list```variable. Here is an example variable:
+	* 
+	```
+	    "device_uuid_cdguuid_list": [
+	        {
+	            "cdguuid": "d6cfd4ef-8f99-4ee4-a5d8-0c11543de5d1",
+	            "device_uuid": "727cfcbf-8041-4ee3-87fb-b30d632bd596",
+	            "hostname": "Node-1",
+	            "ip": "198.19.1.1"
+	        },
+	        {
+	            "cdguuid": "d6cfd4ef-8f99-4ee4-a5d8-0c11543de5d1",
+	            "device_uuid": "7545ffcb-92f6-4c59-ac5f-d1d6129b78d5",
+	            "hostname": "Node-2",
+	            "ip": "198.19.1.2"
+	        },
+	        {
+	            "cdguuid": "d6cfd4ef-8f99-4ee4-a5d8-0c11543de5d1",
+	            "device_uuid": "38d39757-0445-48bc-8035-651873a29e89",
+	            "hostname": "Node-3",
+	            "ip": "198.19.1.3"
+	        }
+	    ]
+	```
+	
+	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invovke the attach device to CDG API will able to generate the payload on the fly without writing the payload to disk.
+	* By using the template module, you can easily generate large amount of API payloads
+	* Example of the payload: 
+6. d
+7. 
 
 
 
