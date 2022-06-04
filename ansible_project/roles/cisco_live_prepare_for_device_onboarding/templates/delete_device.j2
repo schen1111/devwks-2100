@@ -1,0 +1,12 @@
+{
+    "data": [
+{% for item in getDeviceUUIDOutput.json.data %}
+        {
+            "uuid": "{{item.uuid}}"
+        }
+{% if loop.revindex != 1 %}
+        ,
+{% endif %}
+{% endfor -%} 
+    ]
+}

@@ -1,0 +1,128 @@
+---
+# tasks file for attach_device_to_cdg
+
+- name: get authentication token
+  include_role: 
+    role: get_crosswork_authentication
+
+# The filtering allows the API call to return device details for devices matches the connectivity_ip
+#   in the device yaml variable file
+- name: invoke nodes query API to obtain device UUID for devices that are onboarded to CW
+  uri:
+    validate_certs: no
+    status_code: [200, 201, 202]
+    method: POST
+    url: "https://{{cnc_ip}}:{{cnc_port}}/crosswork/inventory/v1/nodes/query"
+    return_content: yes
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      Authorization: "Bearer {{ myJWT.content }}"
+    body_format: json
+    body: 
+      filter:
+        node_ip:
+          inet_addr: "{{item.connectivity_ip}}"
+  register: getDeviceUUIDOutput
+  with_items: "{{devices}}"
+
+# - name: print entire nodes query API reponse
+#   debug:
+#     var: getDeviceUUIDOutput
+
+# - name: print selected reponse (device UUID) of nodes query API 
+#   debug:
+#     msg: "Device name: {{item.json.data[0].host_name}} Device UUID: {{item.json.data[0].uuid}}"
+#   with_items: "{{getDeviceUUIDOutput.results}}"
+#   loop_control: 
+#     label: "{{item.json.data[0].host_name}}"
+
+- name: print device UUID nodes query API reponse if device is not currently attached to a CDG
+  debug:
+    msg: "Device name: {{item.json.data[0].host_name}} Device IP: {{item.json.data[0].node_ip.inet_addr}} Device UUID: {{item.json.data[0].uuid}}"
+  with_items: "{{getDeviceUUIDOutput.results}}"
+  loop_control: 
+    label: "{{item.json.data[0].host_name}}"
+  when: item.json.data[0].dg_uuid is not defined
+
+
+
+# - name: Create a new dict with Deivce IP and Device UUID for devices that aren't attached to a CDG
+#   set_fact:
+#     device_uuid_dict: "{{ device_uuid_dict | default([]) | combine ({ item.json.data[0].node_ip.inet_addr : item.json.data[0].uuid }) }}"
+#   with_items: "{{getDeviceUUIDOutput.results}}"
+#   loop_control: 
+#     label: "{{item.json.data[0].host_name}}"
+#   when: item.json.data[0].dg_uuid is not defined
+
+
+# - name: Create a new dict with Deivce IP and vdguuid
+#   set_fact:
+#     device_vdguuid_dict: "{{ device_uuid_dict | default([]) | combine ({ item.json.data[0].node_ip.inet_addr : item.json.data[0].uuid }) }}"
+#   with_items: "{{getDeviceUUIDOutput.results}}"
+#   loop_control: 
+#     label: "{{item.json.data[0].host_name}}"
+#   when: item.json.data[0].dg_uuid is not defined
+
+# - name: print device_uuid_dict
+#   debug:
+#     var: device_uuid_dict
+
+# - name: Create a list of dict with Deivce IP and uuid for devices that aren't attached to a CDG
+#   set_fact:
+#     device_uuid_list: "{{ device_uuid_list | default([]) + [{ 'ip' : item.json.data[0].node_ip.inet_addr, 'device_uuid' : item.json.data[0].uuid, 'hostname' :  item.json.data[0].host_name }] }}"
+#   with_items: "{{getDeviceUUIDOutput.results}}"
+#   loop_control: 
+#     label: "{{item.json.data[0].host_name}}"
+#   when: item.json.data[0].dg_uuid is not defined
+
+# - name: print device_uuid_dict
+#   debug:
+#     var: device_uuid_list
+
+- name: Create a new dict with Deivce IP and Device vdguuid
+  set_fact:
+    device_vdguuid_dict: "{{ device_vdguuid_dict | default([]) | combine ({ item.connectivity_ip : item.vdguuid }) }}"
+  with_items: "{{devices}}"
+  loop_control: 
+    label: "{{item.host_name}}"
+
+- name: print device_vdguuid_dict
+  debug:
+    var: device_vdguuid_dict
+
+
+- name: Create a list of dict with hostname, deivce ip and device uuid and planned vdguuid for devices that aren't attached to a CDG
+  set_fact:
+    device_uuid_cdguuid_list: "{{ device_uuid_cdguuid_list | default([]) + [{ 'ip' : item.json.data[0].node_ip.inet_addr, 'device_uuid' : item.json.data[0].uuid, 'hostname' :  item.json.data[0].host_name, 'cdguuid' : device_vdguuid_dict[item.json.data[0].node_ip.inet_addr] }] }}"
+  with_items: "{{getDeviceUUIDOutput.results}}"
+  loop_control: 
+    label: "{{item.json.data[0].host_name}}"
+  when: item.json.data[0].dg_uuid is not defined
+
+- name: print device_uuid_cdguuid_list
+  debug:
+    var: device_uuid_cdguuid_list
+
+
+
+- name: invoke attach device to CDG API to attached device (currently not attached to a CDG) to CDG
+  uri:
+    validate_certs: no
+    status_code: [200, 201, 202]
+    method: PUT
+    url: "https://{{cnc_ip}}:{{cnc_port}}/crosswork/inventory/v1/dg/devicemapping"
+    return_content: yes
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      Authorization: "Bearer {{ myJWT.content }}"
+    body_format: json
+    body: "{{ lookup('template', '../templates/attach-cdg.j2') }}"
+  register: attachCDGOutput
+  with_items: "{{device_uuid_cdguuid_list}}"
+
+
+- name: print attach device to CDG API response
+  debug:
+    var: attachCDGOutput

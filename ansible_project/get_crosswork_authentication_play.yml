@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  vars_files:
+    - ./global_variable.yml
+
+  roles:
+    - get_crosswork_authentication

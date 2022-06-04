@@ -1,0 +1,75 @@
+---
+# tasks file for change_device_admin_state
+
+- name: get authentication token
+  include_role: 
+    role: get_crosswork_authentication
+
+
+# The filtering allows the API call to return device details for devices matches the connectivity_ip
+#   in the global_variable.yml variable file
+- name: invoke nodes query API to obtain device UUID for devices that are onboarded to CW
+  uri:
+    validate_certs: no
+    status_code: [200, 201, 202]
+    method: POST
+    url: "https://{{cnc_ip}}:{{cnc_port}}/crosswork/inventory/v1/nodes/query"
+    return_content: yes
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      Authorization: "Bearer {{ myJWT.content }}"
+    body_format: json
+    body: 
+      filter:
+        node_ip:
+          inet_addr: "{{item.connectivity_ip}}"
+  register: getDeviceUUIDOutput
+  loop: "{{devices}}"
+  loop_control: 
+    label: "{{item.host_name}}"
+
+
+# - name: print selected reponse (device UUID) of nodes query API 
+#   debug:
+#     msg: "Device name: {{item.json.data[0].host_name}} Device UUID: {{item.json.data[0].uuid}}"
+#   with_items: "{{getDeviceUUIDOutput.results}}"
+#   loop_control: 
+#     label: "{{item.json.data[0].host_name}}"
+
+# The API payload files are stored under /temp_folder/device_admin_status_api_payload/
+# The API payload creation is solely for demonstration purpose. The API call task itself will not utilize the files generated in this task.
+- name: create API payload files for admin up device
+  template:
+    src: "../templates/admin-up.j2"
+    dest: "{{playbook_dir}}/temp_folder/device_admin_status_api_payload/{{item.json.data[0].host_name}}-admin-state-up-payload.json"
+  loop: "{{getDeviceUUIDOutput.results}}"
+  loop_control: 
+    label: "{{item.json.data[0].host_name}}"
+
+
+- name: set admin up for the device (one device per API call)
+  uri:
+    validate_certs: no
+    status_code: [200, 201, 202]
+    method: PATCH
+    url: "https://{{cnc_ip}}:{{cnc_port}}/crosswork/inventory/v1/nodes"
+    return_content: yes
+    headers:
+      Content-Type: application/yang-data+json
+      Accept: application/yang-data+json
+      Authorization: "Bearer {{ myJWT.content }}"
+    body_format: json
+    body: "{{ lookup('template', '../templates/admin-up.j2') }}"
+  register: adminUpOutput
+  loop: "{{getDeviceUUIDOutput.results}}"
+  loop_control: 
+    label: "{{item.json.data[0].host_name}}"
+
+# - name: print device admin up response
+#   debug:
+#     var: adminUpOutput
+
+
+
+

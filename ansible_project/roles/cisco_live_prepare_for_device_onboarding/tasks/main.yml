@@ -1,0 +1,110 @@
+---
+# tasks file for cisco_live_prepare_for_device_onboarding
+
+- name: get authentication token
+  include_role: 
+    role: get_crosswork_authentication
+
+
+# Change PCE provider auto-onboard to off
+- name: invoke provider API to change auto-onboard to off
+  uri:
+    validate_certs: no
+    status_code: [200, 201, 202]
+    method: PUT
+    url: "https://{{cnc_ip}}:{{cnc_port}}/crosswork/inventory/v1/providers"
+    return_content: yes
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      Authorization: "Bearer {{ myJWT.content }}"
+    body_format: json
+    body:
+      {
+          "providers": [
+              {
+                  "name": "SR-PCE-1",
+                  "connectivity_info": [
+                      {
+                          "type": "ROBOT_MSVC_TRANS_HTTP",
+                          "ipaddrs": [
+                              {
+                                  "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                                  "inet_addr": "198.18.1.31",
+                                  "mask": "24"
+                              }
+                          ],
+                          "port": 8080,
+                          "timeout": "30"
+                      }
+                  ],
+                  "profile": "sr-pce",
+                  "family": "ROBOT_PROVIDER_XTC",
+                  "properties": {
+                      "auto-onboard": "off",
+                      "device-profile": "demo"
+                  }
+              },
+              {
+                  "name": "SR-PCE-2",
+                  "connectivity_info": [
+                      {
+                          "type": "ROBOT_MSVC_TRANS_HTTP",
+                          "ipaddrs": [
+                              {
+                                  "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                                  "inet_addr": "198.18.1.32",
+                                  "mask": "24"
+                              }
+                          ],
+                          "port": 8080,
+                          "timeout": "30"
+                      }
+                  ],
+                  "profile": "sr-pce",
+                  "family": "ROBOT_PROVIDER_XTC",
+                  "properties": {
+                      "auto-onboard": "off",
+                      "device-profile": "demo"
+                  }
+              }
+          ]
+      }     
+  register: getProviderOutput
+
+# Get all device UUID
+- name: invoke nodes query API to obtain device UUID for all devices
+  uri:
+    validate_certs: no
+    status_code: [200, 201, 202]
+    method: POST
+    url: "https://{{cnc_ip}}:{{cnc_port}}/crosswork/inventory/v1/nodes/query"
+    return_content: yes
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+      Authorization: "Bearer {{ myJWT.content }}"
+    body_format: json
+  register: getDeviceUUIDOutput
+
+# - name: print nodes query API 
+#   debug:
+#     var: getDeviceUUIDOutput
+
+- name: delete all device fron CNC (all devices in one API call)
+  uri:
+    validate_certs: no
+    status_code: [200, 201, 202]
+    method: DELETE
+    url: "https://{{cnc_ip}}:{{cnc_port}}/crosswork/inventory/v1/nodes"
+    return_content: yes
+    headers:
+      Content-Type: application/yang-data+json
+      Accept: application/yang-data+json
+      Authorization: "Bearer {{ myJWT.content }}"
+    body_format: json
+    body: "{{ lookup('template', '../templates/delete_device.j2') }}"
+  register: adminDownOutput
+
+
+

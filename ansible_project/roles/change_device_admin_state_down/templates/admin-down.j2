@@ -1,0 +1,13 @@
+{
+    "data": [
+{% for item in getDeviceUUIDOutput.results %}
+        {
+            "uuid": "{{item.json.data[0].uuid}}",
+            "admin_state": "ROBOT_ADMIN_STATE_DOWN"
+        }
+{% if loop.revindex != 1 %}
+        ,
+{% endif %}
+{% endfor -%} 
+    ]
+}

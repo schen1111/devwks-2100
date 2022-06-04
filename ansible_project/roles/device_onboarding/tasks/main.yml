@@ -1,0 +1,44 @@
+---
+# tasks file for device_onboarding
+
+- name: get authentication token
+  include_role: 
+    role: get_crosswork_authentication
+
+# The API payload files created under this task is for reference only.
+# You can see payload for each device under folder /temp_folder/device_onboarding_api_payload/
+# devices variable is defined under global_variable.yml
+- name: create API payloads for adding new devices to CNC
+  template:
+    src: "../templates/add-device.j2"
+    dest: "{{playbook_dir}}/temp_folder/device_onboarding_api_payload/add-device-{{item.host_name}}.json"
+  loop: "{{devices}}"
+  loop_control: 
+    label: "{{item.host_name}}"
+
+# This task will add devices in the global_variable.yml to Crosswork
+- name: invoke add nodes API using lookup template
+  uri:
+    validate_certs: no
+    status_code: [200, 201, 202]
+    method: POST
+    url: "https://{{cnc_ip}}:{{cnc_port}}/crosswork/inventory/v1/nodes"
+    return_content: yes
+    headers:
+      Content-Type: application/yang-data+json
+      Accept: application/yang-data+json
+      Authorization: "Bearer {{ myJWT.content }}"
+    body_format: json
+    body: "{{ lookup('template', '../templates/add-device.j2') }}"
+  register: addNodeAPIOoutput
+  loop: "{{devices}}"
+  loop_control: 
+    label: "{{item.host_name}}"
+
+#This task print out the partial response from the add node API
+- name: print output of the add node API
+  debug:
+    msg: " "
+  with_items: "{{addNodeAPIOoutput.results}}"
+  loop_control: 
+    label: "{{item.json}}"

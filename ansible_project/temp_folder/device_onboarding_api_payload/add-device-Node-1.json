@@ -1,0 +1,95 @@
+{
+    "data": [
+        {
+            "inv_key_type": "NODE_IP",
+            "node_ip": {
+                "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                "inet_addr": "198.19.1.1",
+                "mask": "32"
+            },
+            "host_name": "Node-1",
+            "profile": "demo",
+            "admin_state": "ROBOT_ADMIN_STATE_UP",
+            "connectivity_info": [
+                {
+                    "type": "ROBOT_MSVC_TRANS_SSH",
+                    "ipaddrs": [
+                        {
+                            "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                            "inet_addr": "198.19.1.1",
+                            "mask": "32"
+                        }
+                    ],
+                    "port": 22,
+                    "timeout": "30"
+                },
+                {
+                    "type": "ROBOT_MSVC_TRANS_SNMP",
+                    "ipaddrs": [
+                        {
+                            "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                            "inet_addr": "198.19.1.1",
+                            "mask": "32"
+                        }
+                    ],
+                    "port": 161,
+                    "timeout": "30"
+                },
+                {
+                    "type": "ROBOT_MSVC_TRANS_NETCONF",
+                    "ipaddrs": [
+                        {
+                            "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                            "inet_addr": "198.19.1.1",
+                            "mask": "32"
+                        }
+                    ],
+                    "port": 830,
+                    "timeout": "120"
+                },
+                {
+                    "type": "ROBOT_MSVC_TRANS_GNMI",
+                    "ipaddrs": [
+                        {
+                            "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
+                            "inet_addr": "198.19.1.1",
+                            "mask": "32"
+                        }
+                    ],
+                    "port": 57400,
+                    "encoding_type": "JSON_IETF",
+                    "timeout": "30"
+                }
+            ],
+            "product_info": {
+                "capability": [
+                    "YANG_CLI",
+                    "SNMP",
+                    "GNMI",
+                    "YANG_MDT"
+                ],
+                "syslog_format": "RFC_5424"
+            },
+            "geo_info": {
+                "coordinates": {
+                    "longitude": {
+                        "value": -87.6244212
+                    },
+                    "latitude": {
+                        "value": 41.8755616
+                    }
+                }
+            },
+            "reachability_check": "REACH_CHECK_ENABLE",
+            "providers_family": {
+                "ROBOT_PROVIDER_NSO": {
+                    "providers": {
+                        "nso201": {
+                            "provider_name": "nso201"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
