@@ -36,10 +36,11 @@ In order to invoke any Crosswork API, you must first obtain a JWT (JSON Web Toke
 	* The variables used in this playbook are referenced in ```ansible_project/global_variable.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
 	* The output of each steps is saved to a variable within Ansible
 	* Please use Ansible-vault to store the password variable in production scenario
-	
 2. Open Ubuntu (shortcut in desktop)
-
-3. Go to directory: ```cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project```
+3. Go to directory: 
+```
+cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project
+```
 
 4. Execute this playbook ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/get_crosswork_authentication_play.yml)):
 ```
