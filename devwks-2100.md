@@ -18,6 +18,19 @@ This workshop provides walkthrough for few use cases to automate Cisco Crosswork
 #### Use-case #3: Change the Admin State (up or down) of the Device in Crosswork
 
 <br/><br/>
+### Get the Latest Version from Github
+#### Task 1: Get the Latest Version from Github
+1. Open Ubuntu (shortcut in desktop)
+2. Go to directory: 
+```
+cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project
+```
+3. Perform git pull:
+```
+git pull
+```
+
+<br/><br/>
 ### API Authentication (Common Across all Use Cases)
 In order to invoke any Crosswork API, you must first obtain a JWT (JSON Web Token). The JWT needs to be in every HTTP header of API calls using the Bearer Authorization. This is a two step process. 
 
@@ -308,11 +321,11 @@ cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project
 ansible-playbook change_device_admin_state_down_play.yml 
 ```
 5. Check the Crosswork Web GUI in the Windows VM for devices admin status: ```https://198.18.134.219:30603/#/inventory/overview```
-6. Execute the below playbook to **admin up** devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/change_device_admin_state_down_play.yml)):
+6. Execute the below playbook to **admin up** devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/change_device_admin_state_up_play.yml)):
 ```
-ansible-playbook change_device_admin_state_down_play.yml 
+ansible-playbook change_device_admin_state_up_play.yml
 ```
-
+7. Check the Crosswork Web GUI in the Windows VM for devices admin status: ```https://198.18.134.219:30603/#/inventory/overview```
 
 
 
