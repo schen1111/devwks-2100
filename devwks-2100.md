@@ -68,7 +68,7 @@ This use-case demonstrates how to leverage Ansible to onboard devices to Crosswo
 
 #### Task 4: Understand Device Onboarding
 1. Most of you will probably get a list of devices to onboard via an Excel sheet. One of the easier ways for Ansible to consume the data is to convert the Excel into Yaml file. You can do it fairly easily using online tools
-2. (Not required for this lab) - Covert Excel to CSV
+2. (Not required for this lab) - Covert Excel to CSV. Here an example of the CSV used in this lab: ([content link](https://github.com/schen1111/devwks-2100/blob/main/media/dCloud_device_list_csv.csv))
 3. (Not required for this lab) - Covert CSV to YAML by using online converter. Converter can be found via search engines
 4. (Not required for this lab) - Use online YAML beautifier to properly format the converted YAML file. YAML beautifierc can be found via search engines.
 5. Inspect ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)) to see the converted YAML under the devices section
