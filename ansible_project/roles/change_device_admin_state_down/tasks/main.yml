@@ -7,8 +7,8 @@
 
 
 # The filtering allows the API call to return device details for devices matches the connectivity_ip
-#   in the global_variable.yml variable file
-- name: invoke nodes query API to obtain device UUID for devices that are onboarded to CW
+#   in global_variable.yml variable file
+- name: invoke nodes query API to obtain device UUID
   uri:
     validate_certs: no
     status_code: [200, 201, 202]
@@ -40,7 +40,7 @@
 
 # The API payload files are stored under /temp_folder/device_admin_status_api_payload/
 # The API payload creation is solely for demonstration purpose. The API call task itself will not utilize the files generated in this task.
-- name: create API payloads for admin down device
+- name: create API payloads for device admin down state
   template:
     src: "../templates/admin-down.j2"
     dest: "{{playbook_dir}}/temp_folder/device_admin_status_api_payload/device-admin-state-down-payload.json"

@@ -8,7 +8,7 @@
 
 # The filtering allows the API call to return device details for devices matches the connectivity_ip
 #   in the global_variable.yml variable file
-- name: invoke nodes query API to obtain device UUID for devices that are onboarded to CW
+- name: invoke nodes query API to obtain device UUID
   uri:
     validate_certs: no
     status_code: [200, 201, 202]

@@ -51,7 +51,7 @@ ansible-playbook get_crosswork_authentication_play.yml
 
 <br/><br/>
 ### Use-case #1: Device Onboarding
-This usecase demonstrates how to leverage Ansible to onboard devices to Crosswork.
+This use-case demonstrates how to leverage Ansible to onboard devices to Crosswork.
 
 #### Task 3: Understand Device Onboarding
 1. Most of you will probably get a list of devices to onboard via an Excel sheet. One of the easier ways for Ansible to consume the data is to convert the Excel into Yaml file. You can do it fairly easily using online tools
@@ -63,12 +63,12 @@ This usecase demonstrates how to leverage Ansible to onboard devices to Crosswor
 	* The task will loop through the devices variable ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
 	* For each item in the devices variable list, it will generate an API payload by using the Ansible template module
 	* The template module mainly consist of two parts:
-		* ```src``` - source of template 	
+		* ```src``` - Jinja2 template source path
 		* ```dest``` - destionation location to render the template output
 	* Inspect this Jinja2 template ```ansible_project/roles/device_onboarding/templates/add-device.j2```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/device_onboarding/templates/add-device.j2))
 		* All the variables referenced in the template can be found in the devices variable ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
 	* Example of the payloads```ansible_project/temp_folder/device_onboarding_api_payload```: [content link](https://github.com/schen1111/devwks-2100/tree/main/ansible_project/temp_folder/device_onboarding_api_payload)
-	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invovke the onbarding API will able to generate the payload on the fly without writing the payload to disk.
+	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invoke the onbarding API will able to generate the payload on the fly without writing the payload to disk.
 	* By using the template module, you can easily generate large amount of API payloads
 
 ```yaml
@@ -103,7 +103,7 @@ ansible-playbook device-onboarding-play.yml
 
 <br/><br/>
 ### Use-case #2: Attach Devices to CDG (Crosswork Data Collector)
-This usecase demonstrates how to leverage Ansible to attach onboarded devices to CDG (Crosswork Data Gateway)
+This use-case demonstrates how to leverage Ansible to attach onboarded devices to CDG (Crosswork Data Gateway)
 
 #### Task 5: Understand Attach Devices to CDG
 1. Once devices are onboarded to Crosswork, they must be attached to CDG before becoming operational
@@ -128,7 +128,7 @@ This usecase demonstrates how to leverage Ansible to attach onboarded devices to
 	* The task will loop through the ```device_uuid_cdguuid_list``` variable
 	* For each item in the variable list, it will generate an API payload by using the Ansible template module
 	* The template module mainly consist of two parts:
-		* ```src``` - source of template 	
+		* ```src``` - Jinja2 template source path
 		* ```dest``` - destionation location to render the template output
 	* Inspect this Jinja2 template ```ansible_project/roles/attach_device_to_cdg/templates/attach-cdg.j2```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/attach_device_to_cdg/templates/attach-cdg.j2))
 	* All the variables referenced in the template can be found in the ```device_uuid_cdguuid_list```variable. Here is an example variable:
@@ -157,7 +157,7 @@ This usecase demonstrates how to leverage Ansible to attach onboarded devices to
 	```
 	
 	* Example of the payloads```ansible_project/temp_folder/attach_device_to_cdg_api_payload```: [content link](https://github.com/schen1111/devwks-2100/tree/main/ansible_project/temp_folder/attach_device_to_cdg_api_payload)
-	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invovke the attach device to CDG API will able to generate the payload on the fly without writing the payload to disk.
+	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invoke the attach device to CDG API will able to generate the payload on the fly without writing the payload to disk.
 	* By using the template module, you can easily generate large amount of API payloads
 
 
@@ -173,7 +173,7 @@ ansible-playbook cisco_live_prepare_for_attach_device_to_cdg_play.yml
 3. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/cdg/inventory```. You can view devices that are currently attached to CDG by looking at the "Attached Device Count". There should be none at this point
 	* Username: ```admin```
 	* Password: ```C!sco12345```
-4. Execute the below playbook to identify the VDG UUID for your instance:
+4. Execute the below playbook to identify the VDG UUID for your instance ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/obtain_cdg_info_play.yml)):
 ```
 ansible-playbook obtain_cdg_info_play.yml
 ```
@@ -186,6 +186,79 @@ cat temp_folder/obtain_cdg_info/cdg-info
 ansible-playbook attach_device_to_cdg_play.yml
 ```
 5. Check the Crosswork Web GUI in the Windows VM for "Attached Device Count": ```https://198.18.134.219:30603/#/cdg/inventory```
+
+
+<br/><br/>
+### Use-case #3: Change the Admin State (up or down) of the Device in Crosswork
+This use-case demonstrates how to leverage Ansible to change device admin state (up or down) in Crosswork.
+
+#### Task 7: Understand Device Admin State Change
+1. Device onboarded in Crosswork can be in few admin states: Up, Down, or Unmanaged
+2. Some device setting might not able to be changed unless the admin state is in Down or Unmanaged state
+3. You can define which devices are included in the admin state change by adding them or removing them in the ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)). Devices section was converted from CSV to YAML. See Task 3 on how to convert CSV to YAML.
+4. Inspect the Ansible tasks: ```ansible_project/roles/change_device_admin_state_down/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/change_device_admin_state_down/tasks/main.yml))
+	* Task```invoke nodes query API to obtain device UUID for devices that are onboarded to CW``` will make an API call to obtain devices info which includes the UUID for each device.
+5. Task```create API payloads for device admin down state```will generate device admin down state API payload from the variable ```getDeviceUUIDOutput``` using the Jinja2 template
+
+	```yaml
+	- name: create API payloads for device admin down state
+	  template:
+	    src: "../templates/admin-down.j2"
+	    dest: "{{playbook_dir}}/temp_folder/device_admin_status_api_payload/device-admin-state-down-payload.json"
+    ```
+
+	* The template module mainly consist of two parts:
+		* ```src``` - Jinja2 template source path
+		* ```dest``` - destionation location to render the template output
+	* Inspect this Jinja2 template ```ansible_project/roles/change_device_admin_state_down/templates/admin-down.j2```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/change_device_admin_state_down/templates/admin-down.j2))
+
+		```jinja2
+		{
+		    "data": [
+		{% for item in getDeviceUUIDOutput.results %}
+		        {
+		            "uuid": "{{item.json.data[0].uuid}}",
+		            "admin_state": "ROBOT_ADMIN_STATE_DOWN"
+		        }
+		{% if loop.revindex != 1 %}
+		        ,
+		{% endif %}
+		{% endfor -%} 
+		    ]
+		}
+		```
+	* In this scenario, the API payload can contain many devices. It will do the loop within the template
+	* For each item in the ```getDeviceUUIDOutput.results``` list, it will generate an API payload by adding the device UUID.
+	* The "if statement" will add a comma after adding each item in the payload unless it is the last item in the list. This is to confirm the the standard json formatting
+	* Here is an example of the generated payload ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/temp_folder/device_admin_status_api_payload/device-admin-state-down-payload.json)): 
+
+		```json
+		{
+		    "data": [
+		        {
+		            "uuid": "38ae6962-23f5-4bea-8e64-c7d225536689",
+		            "admin_state": "ROBOT_ADMIN_STATE_DOWN"
+		        }
+		        ,
+		        {
+		            "uuid": "ca4001a4-db5e-447e-9fd6-ec5532bb0704",
+		            "admin_state": "ROBOT_ADMIN_STATE_DOWN"
+		        }
+		        ,
+		        {
+		            "uuid": "6212cc16-fc04-44d3-8ecf-c996e2bcb745",
+		            "admin_state": "ROBOT_ADMIN_STATE_DOWN"
+		        }
+			]
+		}
+		```
+	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invoke the change device admin state API will able to generate the payload on the fly without writing the payload to disk.
+	* By using the template module, you can easily generate large amount of API payloads
+
+
+#### Task 8: Perform Device Admin State Change
+
+
 
 
 
