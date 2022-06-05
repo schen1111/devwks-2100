@@ -37,14 +37,14 @@ In order to invoke any Crosswork API, you must first obtain a JWT (JSON Web Toke
 1. Request a TGT (Ticket Granting Ticket) using your Crosswork GUI credential 
 2. Request a JWT using the TGT in step 1
 
-#### Task 1: Perform Authentication using Postman
+#### Task 2: Perform Authentication using Postman
 1. Open Postman (shortcut in desktop)
 2. Expand this collection "DEVWKS-2100"
 3. Expand CW Authentication folder. You should see two post requests
 4. Select "cw-api-get-ticket-step1" request and hit send. You should see a TGT in the response
 5. Select "cw-api-get-jwt-step2" request and hit send. You should see a JWT in the response
 
-#### Task 2: Perform Authentication using Ansible
+#### Task 3: Perform Authentication using Ansible
 1. Inspect this playbook: ```ansible_project/roles/get_crosswork_authentication/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/get_crosswork_authentication/tasks/main.yml)). This playbook minmics the two steps in Postman. 
 	* The variables used in this playbook are referenced in ```ansible_project/global_variable.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
 	* The output of each steps is saved to a variable within Ansible
@@ -66,7 +66,7 @@ ansible-playbook get_crosswork_authentication_play.yml
 ### Use-case #1: Device Onboarding
 This use-case demonstrates how to leverage Ansible to onboard devices to Crosswork.
 
-#### Task 3: Understand Device Onboarding
+#### Task 4: Understand Device Onboarding
 1. Most of you will probably get a list of devices to onboard via an Excel sheet. One of the easier ways for Ansible to consume the data is to convert the Excel into Yaml file. You can do it fairly easily using online tools
 2. (Not required for this lab) - Covert Excel to CSV
 3. (Not required for this lab) - Covert CSV to YAML by using online converter. Converter can be found via search engines
@@ -94,7 +94,7 @@ This use-case demonstrates how to leverage Ansible to onboard devices to Crosswo
     label: "{{item.host_name}}"
 ```
 
-#### Task 4: Perform Device Onboarding
+#### Task 5: Perform Device Onboarding
 1. Go to directory: 
 ```
 cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project
@@ -118,7 +118,7 @@ ansible-playbook device-onboarding-play.yml
 ### Use-case #2: Attach Devices to CDG (Crosswork Data Collector)
 This use-case demonstrates how to leverage Ansible to attach onboarded devices to CDG (Crosswork Data Gateway)
 
-#### Task 5: Understand Attach Devices to CDG
+#### Task 6: Understand Attach Devices to CDG
 1. Once devices are onboarded to Crosswork, they must be attached to CDG before becoming operational
 2. Crosswork can have multiple CDGs for redundancy and scalability reasons. In this lab, there will be only one CDG. If there are mutiple CDGs, devices can be attached to different CDG
 3. You can define which device is attached to which CDG by changing the vdguuid for each device under ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
@@ -174,7 +174,7 @@ This use-case demonstrates how to leverage Ansible to attach onboarded devices t
 	* By using the template module, you can easily generate large amount of API payloads
 
 
-#### Task 6: Attach Devices to CDG
+#### Task 7: Attach Devices to CDG
 1. Go to directory: 
 ```
 cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project
@@ -205,7 +205,7 @@ ansible-playbook attach_device_to_cdg_play.yml
 ### Use-case #3: Change the Admin State (up or down) of the Device in Crosswork
 This use-case demonstrates how to leverage Ansible to change device admin state (up or down) in Crosswork.
 
-#### Task 7: Understand Device Admin State Change
+#### Task 8: Understand Device Admin State Change
 1. Device onboarded in Crosswork can be in few admin states: Up, Down, or Unmanaged
 2. Some device setting might not able to be changed unless the admin state is in Down or Unmanaged state
 3. You can define which devices are included in the admin state change by adding them or removing them in the ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)). Devices section was converted from CSV to YAML. See Task 3 on how to convert CSV to YAML.
@@ -307,7 +307,7 @@ This use-case demonstrates how to leverage Ansible to change device admin state 
 	```
 
 
-#### Task 8: Perform Device Admin State Change
+#### Task 9: Perform Device Admin State Change
 1. Go to directory: 
 ```
 cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project
