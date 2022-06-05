@@ -18,8 +18,8 @@ This workshop provides walkthrough for few use cases to automate Cisco Crosswork
 #### Use-case #3: Change the Admin State (up or down) of the Device in Crosswork
 
 <br/><br/>
-### Get the Latest Version from Github
-#### Task 1: Get the Latest Version from Github
+### Get the Latest Ansible Code from Github
+#### Task 1: Get the Latest Ansible Code from Github
 1. Open Ubuntu (shortcut in desktop)
 2. Go to directory: 
 ```
