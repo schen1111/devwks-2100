@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  gather_facts: true
+  connection: local
+  vars_files:
+    - ./global_variable.yml
+
+  roles:
+    - change_device_admin_state_up

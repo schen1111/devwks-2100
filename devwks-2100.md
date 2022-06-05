@@ -299,15 +299,19 @@ This use-case demonstrates how to leverage Ansible to change device admin state 
 ```
 cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project
 ```
-2. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/inventory/overview```. You can view devices that are currently onboarded to Crosswork. There should be none at this point
+2. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/inventory/overview```. You can view devices that are currently onboarded to Crosswork and their admin status
 	* Username: ```admin```
 	* Password: ```C!sco12345```
-3. The devices listed in ```ansible_project/global_variable.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)) will be onboarded to Crosswork
-4. Execute the below playbook to **admin down** devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/device-onboarding-play.yml)):
+3. The devices listed in ```ansible_project/global_variable.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)) will be have their admin state changed.
+4. Execute the below playbook to **admin down** devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/change_device_admin_state_down_play.yml)):
 ```
 ansible-playbook change_device_admin_state_down_play.yml 
 ```
-5. Check the Crosswork Web GUI in the Windows VM for the newly onboarded devices: ```https://198.18.134.219:30603/#/inventory/overview```
+5. Check the Crosswork Web GUI in the Windows VM for devices admin status: ```https://198.18.134.219:30603/#/inventory/overview```
+6. Execute the below playbook to **admin up** devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/change_device_admin_state_down_play.yml)):
+```
+ansible-playbook change_device_admin_state_down_play.yml 
+```
 
 
 
