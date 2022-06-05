@@ -272,13 +272,13 @@ This use-case demonstrates how to leverage Ansible to change device admin state 
 	* The below task is looping through ```getDeviceUUIDOutput``` variable to generate an API payload per device.
 	
 	```yaml
-		- name: create API payload files for admin up device
-		  template:
-		    src: "../templates/admin-up.j2"
-		    dest: "{{playbook_dir}}/temp_folder/device_admin_status_api_payload/{{item.json.data[0].host_name}}-admin-state-up-payload.json"
-		  loop: "{{getDeviceUUIDOutput.results}}"
-		  loop_control: 
-		    label: "{{item.json.data[0].host_name}}"
+	- name: create API payload files for admin up device
+	  template:
+	    src: "../templates/admin-up.j2"
+	    dest: "{{playbook_dir}}/temp_folder/device_admin_status_api_payload/{{item.json.data[0].host_name}}-admin-state-up-payload.json"
+	  loop: "{{getDeviceUUIDOutput.results}}"
+	  loop_control: 
+	    label: "{{item.json.data[0].host_name}}"
     ```
 	* There's no looping within the template itself ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/change_device_admin_state_up/templates/admin-up.j2)):
 	
