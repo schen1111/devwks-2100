@@ -1,37 +1,37 @@
 {
     "data": [
         {
-            "uuid": "38ae6962-23f5-4bea-8e64-c7d225536689",
+            "uuid": "727cfcbf-8041-4ee3-87fb-b30d632bd596",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "ca4001a4-db5e-447e-9fd6-ec5532bb0704",
+            "uuid": "7545ffcb-92f6-4c59-ac5f-d1d6129b78d5",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "6212cc16-fc04-44d3-8ecf-c996e2bcb745",
+            "uuid": "38d39757-0445-48bc-8035-651873a29e89",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "97a9a18f-52f8-4576-8d44-7d5270fd364f",
+            "uuid": "144dd8f0-3004-4935-8c22-69538b9f64fc",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "61de80e1-7059-4d18-b56d-25dddc483021",
+            "uuid": "41945ab6-283e-4247-baba-fb4fd38f2b57",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "286d46cf-a3d1-4afc-949f-d8c179e4bf68",
+            "uuid": "3eedc753-cd76-4dff-9c24-b86d5c031fc3",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "cd5cc98d-1ce1-47a3-a36d-0e1111c14b0f",
+            "uuid": "b239a5e1-edb0-4918-ad51-7cc1d150ccb7",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
 ]

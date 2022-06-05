@@ -1,6 +1,6 @@
-# DevNet Workshop - DEVWKS-2100
+## DevNet Workshop - DEVWKS-2100
 
-# Build Ansible Plays to Automate Crosswork API Invocations
+## Build Ansible Plays to Automate Crosswork API Invocations
 
 
 ### Sanka Chen, CCIE #49686, Technical Leader, Cisco Systems
@@ -196,7 +196,7 @@ This use-case demonstrates how to leverage Ansible to change device admin state 
 1. Device onboarded in Crosswork can be in few admin states: Up, Down, or Unmanaged
 2. Some device setting might not able to be changed unless the admin state is in Down or Unmanaged state
 3. You can define which devices are included in the admin state change by adding them or removing them in the ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)). Devices section was converted from CSV to YAML. See Task 3 on how to convert CSV to YAML.
-4. Inspect the Ansible tasks: ```ansible_project/roles/change_device_admin_state_down/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/change_device_admin_state_down/tasks/main.yml))
+4. Inspect the Ansible tasks for **admin down**: ```ansible_project/roles/change_device_admin_state_down/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/change_device_admin_state_down/tasks/main.yml))
 	* Task```invoke nodes query API to obtain device UUID for devices that are onboarded to CW``` will make an API call to obtain devices info which includes the UUID for each device.
 5. Task```create API payloads for device admin down state```will generate device admin down state API payload from the variable ```getDeviceUUIDOutput``` using the Jinja2 template
 
@@ -254,9 +254,61 @@ This use-case demonstrates how to leverage Ansible to change device admin state 
 		```
 	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invoke the change device admin state API will able to generate the payload on the fly without writing the payload to disk.
 	* By using the template module, you can easily generate large amount of API payloads
+6. Inspect the Ansible tasks for **admin up**: ```ansible_project/roles/change_device_admin_state_up/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/change_device_admin_state_up/tasks/main.yml)). 
+	* The admin up playbook is similar to the admin down playbook. The primary difference in admin up is making one API call per device instead of combining all devices in a single API call when making device admin state change. There is no technical reason behind it. It was done to demonstrate a different method.
+	* The below task is looping through ```getDeviceUUIDOutput``` variable to generate an API payload per device.
+	
+	```yaml
+		- name: create API payload files for admin up device
+		  template:
+		    src: "../templates/admin-up.j2"
+		    dest: "{{playbook_dir}}/temp_folder/device_admin_status_api_payload/{{item.json.data[0].host_name}}-admin-state-up-payload.json"
+		  loop: "{{getDeviceUUIDOutput.results}}"
+		  loop_control: 
+		    label: "{{item.json.data[0].host_name}}"
+    ```
+	* There's no looping within the template itself ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/change_device_admin_state_up/templates/admin-up.j2)):
+	
+	```json
+	{
+	    "data": [
+	        {
+	            "uuid": "{{item.json.data[0].uuid}}",
+	            "admin_state": "ROBOT_ADMIN_STATE_UP"
+	        }
+	    ]
+	}	
+	```
+	*  Here is an example of the generated payload ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/temp_folder/device_admin_status_api_payload/Node-1-admin-state-up-payload.json)):
+	
+	```json
+	{
+	    "data": [
+	        {
+	            "uuid": "38ae6962-23f5-4bea-8e64-c7d225536689",
+	            "admin_state": "ROBOT_ADMIN_STATE_UP"
+	            
+	        }
+	    ]
+	}
+	```
 
 
 #### Task 8: Perform Device Admin State Change
+1. Go to directory: 
+```
+cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project
+```
+2. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/inventory/overview```. You can view devices that are currently onboarded to Crosswork. There should be none at this point
+	* Username: ```admin```
+	* Password: ```C!sco12345```
+3. The devices listed in ```ansible_project/global_variable.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)) will be onboarded to Crosswork
+4. Execute the below playbook to **admin down** devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/device-onboarding-play.yml)):
+```
+ansible-playbook change_device_admin_state_down_play.yml 
+```
+5. Check the Crosswork Web GUI in the Windows VM for the newly onboarded devices: ```https://198.18.134.219:30603/#/inventory/overview```
+
 
 
 
