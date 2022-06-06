@@ -61,9 +61,9 @@
     label: "{{item.json.data[0].host_name}}"
   when: item.json.data[0].dg_uuid is not defined
 
-- name: print device_uuid_cdguuid_list
-  debug:
-    var: device_uuid_cdguuid_list
+# - name: print device_uuid_cdguuid_list
+#   debug:
+#     var: device_uuid_cdguuid_list
 
 
 # The API payload files created under this task is for reference only.
@@ -96,6 +96,6 @@
   with_items: "{{device_uuid_cdguuid_list}}"
 
 
-- name: print attach device to CDG API response
-  debug:
-    var: attachCDGOutput
+# - name: print attach device to CDG API response
+#   debug:
+#     var: attachCDGOutput
