@@ -40,7 +40,7 @@
 
 # Create a new dictionary variable which device IP as the key and the vdguuid as the value. 
 #  The next task will leverage this variable to look up which device should be attach to which CDG.
-- name: create a new dictionary with Deivce IP and Device vdguuid
+- name: create a new dictionary with Device IP and Device vdguuid
   set_fact:
     device_vdguuid_dict: "{{ device_vdguuid_dict | default([]) | combine ({ item.connectivity_ip : item.vdguuid }) }}"
   with_items: "{{devices}}"

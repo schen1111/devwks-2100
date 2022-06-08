@@ -31,8 +31,12 @@ git pull
 ```
 
 <br/><br/>
+### Ansible Directory Structure
+![Ansible Directory Structure](https://github.com/schen1111/devwks-2100/blob/main/media/ansible_file_structure.png)
+
+<br/><br/>
 ### API Authentication (Common Across all Use Cases)
-In order to invoke any Crosswork API, you must first obtain a JWT (JSON Web Token). The JWT needs to be in every HTTP header of API calls using the Bearer Authorization. This is a two step process. 
+In order to invoke any Crosswork API, you must first obtain a JWT (JSON Web Token). The JWT needs to be in every HTTP header of API calls using the Bearer Authorization. This is a two-step process. 
 
 1. Request a TGT (Ticket Granting Ticket) using your Crosswork GUI credential 
 2. Request a JWT using the TGT in step 1
@@ -70,18 +74,18 @@ This use-case demonstrates how to leverage Ansible to onboard devices to Crosswo
 1. Most of you will probably get a list of devices to onboard via an Excel sheet. One of the easier ways for Ansible to consume the data is to convert the Excel into Yaml file. You can do it fairly easily using online tools
 2. (Not required for this lab) - Covert Excel to CSV. Here an example of the CSV used in this lab: ([content link](https://github.com/schen1111/devwks-2100/blob/main/media/dCloud_device_list_csv.csv))
 3. (Not required for this lab) - Covert CSV to YAML by using online converter. Converter can be found via search engines
-4. (Not required for this lab) - Use online YAML beautifier to properly format the converted YAML file. YAML beautifierc can be found via search engines.
+4. (Not required for this lab) - Use online YAML beautifier to properly format the converted YAML file. YAML beautifier can be found via search engines.
 5. Inspect ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)) to see the converted YAML under the devices section
 6. Inpsect the Ansible tasks ```/ansible_project/roles/device_onboarding/tasks/main.yml```([link content](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/device_onboarding/tasks/main.yml)) to onboard the devices. The task will generate API payload with each device's information from the global_variable.yml using the Jinja2 template
 	* The task will loop through the devices variable ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
 	* For each item in the devices variable list, it will generate an API payload by using the Ansible template module
 	* The template module mainly consist of two parts:
 		* ```src``` - Jinja2 template source path
-		* ```dest``` - destionation location to render the template output
+		* ```dest``` - destination location to render the template output
 	* Inspect this Jinja2 template ```ansible_project/roles/device_onboarding/templates/add-device.j2```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/device_onboarding/templates/add-device.j2))
 		* All the variables referenced in the template can be found in the devices variable ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
 	* Example of the payloads```ansible_project/temp_folder/device_onboarding_api_payload```: [content link](https://github.com/schen1111/devwks-2100/tree/main/ansible_project/temp_folder/device_onboarding_api_payload)
-	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invoke the onbarding API will able to generate the payload on the fly without writing the payload to disk.
+	* Note that the API payload files are generated for reference only so you can see the payloads. The task that will invoke the onboarding API will able to generate the payload on the fly without writing the payload to disk.
 	* By using the template module, you can easily generate large amount of API payloads
 
 ```yaml
@@ -120,12 +124,12 @@ This use-case demonstrates how to leverage Ansible to attach onboarded devices t
 
 #### Task 6: Understand Attach Devices to CDG
 1. Once devices are onboarded to Crosswork, they must be attached to CDG before becoming operational
-2. Crosswork can have multiple CDGs for redundancy and scalability reasons. In this lab, there will be only one CDG. If there are mutiple CDGs, devices can be attached to different CDG
+2. Crosswork can have multiple CDGs for redundancy and scalability reasons. In this lab, there will be only one CDG. If there are multiple CDGs, devices can be attached to different CDG
 3. You can define which device is attached to which CDG by changing the vdguuid for each device under ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml))
 4. Inspect the Ansible tasks: ```ansible_project/roles/attach_device_to_cdg/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/attach_device_to_cdg/tasks/main.yml))
 	* Task```invoke nodes query API to obtain device UUID for devices that are onboarded to CW``` will make an API call to obtain devices info which includes the UUID for each device.
-	* Task```create a new dictionary with Deivce IP and Device vdguuid``` will create a new dictionary variable which device IP as the key and the vdguuid as the value. The next task will leverage this variable to look up which device should be attach to which CDG.
-	* Task ```create a list of dictionaries for the Jinja2 template``` will create a list of dictionaries with hostname, deivce ip and device uuid and planned vdguuid for devices that aren't attached to a CDG
+	* Task```create a new dictionary with Device IP and Device vdguuid``` will create a new dictionary variable which device IP as the key and the vdguuid as the value. The next task will leverage this variable to look up which device should be attach to which CDG.
+	* Task ```create a list of dictionaries for the Jinja2 template``` will create a list of dictionaries with hostname, device ip and device uuid and planned vdguuid for devices that aren't attached to a CDG
 5. Task```create API payloads for attach CDG to devices```will generate attach device to CDG API payload from the variable ```device_uuid_cdguuid_list``` using the Jinja2 template
 
 	```yaml
@@ -142,7 +146,7 @@ This use-case demonstrates how to leverage Ansible to attach onboarded devices t
 	* For each item in the variable list, it will generate an API payload by using the Ansible template module
 	* The template module mainly consist of two parts:
 		* ```src``` - Jinja2 template source path
-		* ```dest``` - destionation location to render the template output
+		* ```dest``` - destination location to render the template output
 	* Inspect this Jinja2 template ```ansible_project/roles/attach_device_to_cdg/templates/attach-cdg.j2```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/attach_device_to_cdg/templates/attach-cdg.j2))
 	* All the variables referenced in the template can be found in the ```device_uuid_cdguuid_list```variable. Here is an example variable:
 	* 
@@ -222,7 +226,7 @@ This use-case demonstrates how to leverage Ansible to change device admin state 
 
 	* The template module mainly consist of two parts:
 		* ```src``` - Jinja2 template source path
-		* ```dest``` - destionation location to render the template output
+		* ```dest``` - destination location to render the template output
 	* Inspect this Jinja2 template ```ansible_project/roles/change_device_admin_state_down/templates/admin-down.j2```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/change_device_admin_state_down/templates/admin-down.j2))
 
 		```jinja2
