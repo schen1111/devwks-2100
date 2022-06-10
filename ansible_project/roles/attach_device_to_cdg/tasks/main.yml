@@ -99,3 +99,11 @@
 # - name: print attach device to CDG API response
 #   debug:
 #     var: attachCDGOutput
+
+
+- name: print selected attach device to CDG API response
+  debug:
+    msg: "Device: {{item.item.hostname}}. State: {{item.json.state}}. Type: {{item.json.type}}"
+  with_items: "{{attachCDGOutput.results}}"
+  loop_control: 
+    label: "{{item.item.hostname}}"

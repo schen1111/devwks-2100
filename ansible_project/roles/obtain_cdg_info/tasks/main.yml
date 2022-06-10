@@ -39,6 +39,13 @@
   loop_control:
     label: "{{ item.name }}"
 
+# Remove this file {{playbook_dir}}/temp_folder/obtain_cdg_info/cdg-info
+- name: remove cdg-info file
+  ansible.builtin.file:
+    path: "{{playbook_dir}}/temp_folder/obtain_cdg_info/cdg-info"
+    state: absent
+
+
 # This task will output the CDG vdgUuid to a file
 - name: output CDG vdgUuid to a file
   local_action:
