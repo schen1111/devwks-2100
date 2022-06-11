@@ -149,7 +149,7 @@ This use-case demonstrates how to leverage Ansible to attach onboarded devices t
 		* ```dest``` - destination location to render the template output
 	* Inspect this Jinja2 template ```ansible_project/roles/attach_device_to_cdg/templates/attach-cdg.j2```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/attach_device_to_cdg/templates/attach-cdg.j2))
 	* All the variables referenced in the template can be found in the ```device_uuid_cdguuid_list```variable. Here is an example variable:
-	* 
+	
 	```
 	    "device_uuid_cdguuid_list": [
 	        {
@@ -212,7 +212,7 @@ This use-case demonstrates how to leverage Ansible to change device admin state 
 #### Task 8: Understand Device Admin State Change
 1. Device onboarded in Crosswork can be in few admin states: Up, Down, or Unmanaged
 2. Some device setting might not able to be changed unless the admin state is in Down or Unmanaged state
-3. You can define which devices are included in the admin state change by adding them or removing them in the ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)). Devices section was converted from CSV to YAML. See Task 3 on how to convert CSV to YAML.
+3. You can define which devices are included in the admin state change by adding or removing them in the ```ansible_project/global_variable.yml``` ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)). Devices section was converted from CSV to YAML. See Task 4 on how to convert CSV to YAML.
 4. Inspect the Ansible tasks for **admin down**: ```ansible_project/roles/change_device_admin_state_down/tasks/main.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/roles/change_device_admin_state_down/tasks/main.yml))
 	* Task```invoke nodes query API to obtain device UUID for devices that are onboarded to CW``` will make an API call to obtain devices info which includes the UUID for each device.
 5. Task```create API payloads for device admin down state```will generate device admin down state API payload from the variable ```getDeviceUUIDOutput``` using the Jinja2 template
@@ -246,7 +246,7 @@ This use-case demonstrates how to leverage Ansible to change device admin state 
 		```
 	* In this scenario, the API payload can contain many devices. It will do the loop within the template
 	* For each item in the ```getDeviceUUIDOutput.results``` list, it will generate an API payload by adding the device UUID.
-	* The "if statement" will add a comma after adding each item in the payload unless it is the last item in the list. This is to confirm the the standard json formatting
+	* The "if statement" will add a comma after adding each item in the payload unless it is the last item in the list. This is to conform the the standard json formatting
 	* Here is an example of the generated payload ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/temp_folder/device_admin_status_api_payload/device-admin-state-down-payload.json)): 
 
 		```json
@@ -320,7 +320,6 @@ cd /mnt/c/Users/Administrator/Downloads/devwks-2100/ansible_project
 ```
 ansible-playbook cisco_live_prepare_for_device_admin_state_change_play.yml
 ```
-
 3. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/inventory/overview```. You can view devices that are currently onboarded to Crosswork and their admin status
 	* Username: ```admin```
 	* Password: ```C!sco12345```
