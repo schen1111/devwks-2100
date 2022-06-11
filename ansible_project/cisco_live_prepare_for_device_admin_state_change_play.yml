@@ -3,11 +3,17 @@
 - hosts: localhost
   gather_facts: true
   connection: local
-  vars_files:
-    - ./global_variable.yml
 
-  roles:
-    - cisco_live_prepare_for_device_onboarding
-    - device_onboarding
-    - obtain_cdg_info
-    - attach_device_to_cdg
+  tasks:
+    - include_vars:
+        file: ./global_variable.yml
+    - include_role:
+        name: cisco_live_prepare_for_device_onboarding
+    - include_role:
+        name: device_onboarding
+    - include_role:
+        name: obtain_cdg_info
+    - include_vars:
+        file: ./global_variable.yml
+    - include_role:
+        name: attach_device_to_cdg  
