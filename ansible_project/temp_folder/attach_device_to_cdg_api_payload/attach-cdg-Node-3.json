@@ -1,9 +1,9 @@
 {
     "dgDeviceMappings": [
         {
-            "cdg_duuid": "becb80ae-2c7f-4d7f-a3b5-984de9656f09",
+            "cdg_duuid": "e20a211f-a396-4cfb-b1e9-07c0f0772e40",
             "device_uuid": [
-                "2f2f8a09-f839-44c4-bee8-836a834dd700"
+                "b5d70d97-a094-4ad7-91cb-2f553b71bf01"
                 
             ],
             "mapping_oper": "ADD_OPER"

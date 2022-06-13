@@ -337,5 +337,15 @@ ansible-playbook change_device_admin_state_up_play.yml
 
 
 
+<br/><br/>
+### References
+#### dCloud Lab
+* You can schedule the following dCloud lab ([dcloud.cisco.com](https://dcloud.cisco.com/)) and go through the lab guide on your own again after the workshop: ```Cisco Crosswork Network Controller 3.0.1 with CDG 3.0 and NSO 5.5.2 v1.0```
+* [Crosswork API Reference](https://developer.cisco.com/docs/crosswork/#!about-cisco-crosswork)
+
+
+
+
+
 
 
