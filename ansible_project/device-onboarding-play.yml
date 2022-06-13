@@ -8,8 +8,3 @@
 
   roles:
     - device_onboarding
-    # - attach_device_to_cdg
-    # - obtain_cdg_info
-    # - attach_device_to_cdg
-    # - roles/change_device_admin_state_up
-    # - roles/change_device_admin_state_down
