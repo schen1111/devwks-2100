@@ -109,7 +109,7 @@ ansible-playbook cisco_live_prepare_for_device_onboarding_play.yml
 ```
 3. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/inventory/overview```. You can view devices that are currently onboarded to Crosswork. There should be none at this point
 	* Username: ```admin```
-	* Password: ```C!sco12345```
+	* Password: ```cRo55work!```
 4. The devices listed in ```ansible_project/global_variable.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)) will be onboarded to Crosswork
 5. Execute the below playbook to onboard devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/device-onboarding-play.yml)):
 ```
@@ -189,7 +189,7 @@ ansible-playbook cisco_live_prepare_for_attach_device_to_cdg_play.yml
 ```
 3. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/cdg/inventory```. You can view devices that are currently attached to CDG by looking at the "Attached Device Count". There should be none at this point
 	* Username: ```admin```
-	* Password: ```C!sco12345```
+	* Password: ```cRo55work!```
 4. Execute the below playbook to identify the VDG UUID for your instance ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/obtain_cdg_info_play.yml)):
 ```
 ansible-playbook obtain_cdg_info_play.yml
@@ -322,7 +322,7 @@ ansible-playbook cisco_live_prepare_for_device_admin_state_change_play.yml
 ```
 3. Log into Crosswork Web GUI in the Windows VM: ```https://198.18.134.219:30603/#/inventory/overview```. You can view devices that are currently onboarded to Crosswork and their admin status
 	* Username: ```admin```
-	* Password: ```C!sco12345```
+	* Password: ```cRo55work!```
 4. The devices listed in ```ansible_project/global_variable.yml```([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/global_variable.yml)) will be have their admin state changed.
 5. Execute the below playbook to **admin down** devices ([content link](https://github.com/schen1111/devwks-2100/blob/main/ansible_project/change_device_admin_state_down_play.yml)):
 ```
@@ -340,7 +340,7 @@ ansible-playbook change_device_admin_state_up_play.yml
 <br/><br/>
 ### References
 #### dCloud Lab
-* You can schedule the following dCloud lab ([dcloud.cisco.com](https://dcloud.cisco.com/)) and go through the lab guide on your own again after the workshop: ```Cisco Crosswork Network Controller 3.0.1 with CDG 3.0 and NSO 5.5.2 v1.0```
+* You can schedule the following dCloud lab ([dcloud.cisco.com](https://dcloud.cisco.com/)) and go through the lab guide on your own again after the workshop: ```Crosswork Network Controller 4.1 with CDG 4.1 and NSO 5.7.6 v1.0```
 	* You will need to do git clone of this repo inside the Windows Subsystem for Linux
 	* You will need to install Ansible inside the Windows Subsystem for Linux
 
