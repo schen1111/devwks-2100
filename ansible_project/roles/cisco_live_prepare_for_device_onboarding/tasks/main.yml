@@ -23,7 +23,7 @@
       {
           "providers": [
               {
-                  "name": "SR-PCE-1",
+                  "name": "SR-PCE",
                   "connectivity_info": [
                       {
                           "type": "ROBOT_MSVC_TRANS_HTTP",
@@ -31,34 +31,11 @@
                               {
                                   "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
                                   "inet_addr": "198.18.1.31",
-                                  "mask": "24"
+                                  "mask": "32"
                               }
                           ],
                           "port": 8080,
-                          "timeout": "30"
-                      }
-                  ],
-                  "profile": "sr-pce",
-                  "family": "ROBOT_PROVIDER_XTC",
-                  "properties": {
-                      "auto-onboard": "off",
-                      "device-profile": "demo"
-                  }
-              },
-              {
-                  "name": "SR-PCE-2",
-                  "connectivity_info": [
-                      {
-                          "type": "ROBOT_MSVC_TRANS_HTTP",
-                          "ipaddrs": [
-                              {
-                                  "inet_af": "ROBOT_INET_ADDR_TYPE_v4",
-                                  "inet_addr": "198.18.1.32",
-                                  "mask": "24"
-                              }
-                          ],
-                          "port": 8080,
-                          "timeout": "30"
+                          "timeout": "90"
                       }
                   ],
                   "profile": "sr-pce",

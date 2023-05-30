@@ -1,37 +1,37 @@
 {
     "data": [
         {
-            "uuid": "fdaf9433-61cc-4cae-8d9b-aabc8ec582a2",
+            "uuid": "2fa1aab6-bda6-4a40-bffc-28344e0bdd85",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "0257adac-66c6-4b6d-b3e0-54edd217f8de",
+            "uuid": "ba73e1a4-fd4d-4bea-851b-0b25626fad0a",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "b5d70d97-a094-4ad7-91cb-2f553b71bf01",
+            "uuid": "c1d70744-a632-4a33-8ce5-e434c5e4966c",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "815365bc-d94b-4ba0-a79e-5e6fd8b8d452",
+            "uuid": "0e84752c-7aab-4ab9-9665-2358b533cf7c",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "4cd6f443-5eb8-4686-8034-c29339c70e7d",
+            "uuid": "bb771476-a944-4f08-8df9-f82b8ea80f9e",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "75c4a0f7-7de6-4fb7-8cad-7b24e03381d2",
+            "uuid": "066869cc-1e5d-45e0-a594-7acb36741cca",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
         ,
         {
-            "uuid": "bb6ba144-225f-4276-a154-72884a314c02",
+            "uuid": "26490b7d-12b4-4117-8ba0-f9f19176dab0",
             "admin_state": "ROBOT_ADMIN_STATE_DOWN"
         }
 ]
